@@ -1,0 +1,74 @@
+- name: New machine post install setup
+  hosts: all
+  tasks:
+    - name: Enable SELinux
+      selinux:
+        policy: targeted
+        state: enforcing
+    - name: Configure yum max old kernels
+      lineinfile: 
+        dest: /etc/yum.conf
+        regexp: '^(.*)installonly_limit(.*)$' 
+        line: 'installonly_limit=2'
+        backrefs: yes
+    - name: Install EPEL
+      yum:
+        name: epel-release
+        state: latest
+    - name: Install necessary packages
+      yum:
+        name:
+          - iptables
+          - iptables-services
+          - htop
+          - vim
+          - iftop
+          - net-snmp
+          - net-tools
+          - yum-cron
+          - yum-utils
+          - wget
+          - ntp
+        state: present
+    - name: Remove unnecessary packages
+      yum:
+        name:
+          - wpa_supplicant
+          - polkit
+          - chrony
+          - firewalld
+          - rsh-server
+          - rsh
+          - ypserv
+          - tftp
+          - tftp-server
+          - talk
+          - talk-server
+          - telnet-server
+          - xinetd
+          - gcc*
+        state: absent
+    - name: Configure yum cron updates
+      lineinfile: 
+        dest: /etc/yum/yum-cron.conf
+        regexp: '^(.*)apply_updates(.*)$' 
+        line: 'apply_updates = yes'
+        backrefs: yes
+    - name: Enable yum cron
+      systemd:
+        name: yum-cron
+        enabled: yes
+        masked: no
+        state: started
+    - name: Set the SSH daemon to ipv4 only
+      lineinfile: 
+        dest: /etc/ssh/sshd_config
+        regexp: '^(.*)AddressFamily(.*)$' 
+        line: 'AddressFamily inet'
+        backrefs: yes
+    - name: Set SSH to version 2 only
+      lineinfile: 
+        dest: /etc/ssh/sshd_config
+        regexp: '^(.*)Protocol(.*)$' 
+        line: 'Protocol 2'
+        backrefs: yes
