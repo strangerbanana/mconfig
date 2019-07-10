@@ -48,6 +48,18 @@
           - xinetd
           - gcc*
         state: absent
+    - name: Enable and start iptables
+      systemd:
+        name: iptables
+        enabled: yes
+        masked: no
+        state: started
+    - name: Enable and start ip6tables
+      systemd:
+        name: ip6tables
+        enabled: yes
+        masked: no
+        state: started
     - name: Configure yum cron updates
       lineinfile: 
         dest: /etc/yum/yum-cron.conf
