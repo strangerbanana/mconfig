@@ -47,6 +47,16 @@
           - telnet-server
           - xinetd
           - gcc*
+          - authconfig
+          - alsa-firmware
+          - alsa-lib
+          - alsa-tools-firmware
+          - lsscsi
+          - iprutils
+          - ivtv-firmware
+          - iw*-firmware
+          - NetworkManager-libnm
+          - NetworkManager
         state: absent
     - name: Enable and start iptables
       systemd:
