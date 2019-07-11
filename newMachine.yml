@@ -53,13 +53,11 @@
         name: iptables
         enabled: yes
         masked: no
-        state: started
     - name: Enable and start ip6tables
       systemd:
         name: ip6tables
         enabled: yes
         masked: no
-        state: started
     - name: Configure yum cron updates
       lineinfile: 
         dest: /etc/yum/yum-cron.conf
@@ -71,7 +69,6 @@
         name: yum-cron
         enabled: yes
         masked: no
-        state: started
     - name: Set the SSH daemon to ipv4 only
       lineinfile: 
         dest: /etc/ssh/sshd_config
