@@ -55,6 +55,7 @@
           - iprutils
           - ivtv-firmware
           - iw*-firmware
+          - aic94xx-firmware
           - NetworkManager-libnm
           - NetworkManager
         state: absent
