@@ -1,0 +1,10 @@
+- name: Creates a new Virtual Machine
+  hosts: all
+  tasks:
+    - name: Get current virtual machines
+      virt:
+        command: "list_vms"
+      register: vms 
+    - name: Print VMs
+      debug:
+        var: vms
