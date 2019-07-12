@@ -3,7 +3,8 @@
   tasks:
     - name: Copy template file to mac address file
       copy:
-        remote_src: /tftpboot/pxelinux.cfg/default
+        remote_src: yes
+        src: /tftpboot/pxelinux.cfg/default
         dest: /tftpboot/pxelinux.cfg/01-{{ vm_mac_address }}
     - name: Wait for the file to be downloaded
       wait_for:
