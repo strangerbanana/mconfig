@@ -14,6 +14,5 @@
         msg: A new VM called {{ vm_name }} with  {{ vm_num_cpu }} CPUs and {{ vm_ram }} MB RAM running {{ vm_os }} will be put onto the {{ vm_network }}
     - name: create disk
       command: >
-               virt-builder --format qcow2 centos-7.4
-               -o {{ vm_location }}/{{ vm_name }}.qcow2
+               virt-builder --format qcow2 centos-7.4 -o {{ vm_location }}/{{ vm_name }}.qcow2
       when: vm_name not in disks.stdout
