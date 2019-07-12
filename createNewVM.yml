@@ -19,7 +19,7 @@
       command: >
                virt-install --connect qemu:///system --name={{ vm_name }} --vcpus={{ vm_num_cpu }} 
                --memory={{ vm_ram }} --os-variant={{ vm_os_type }} 
-               --disk path=/{{ vm_location }}/{{ vm_name }}.qcow2,bus=virtio,size={{ vm_disk_size }}
+               --disk path={{ vm_location }}/{{ vm_name }}.qcow2,bus=virtio,size={{ vm_disk_size }}
                --network type=direct,source=eno1,source_mode=bridge --virt-type qemu --graphics vnc
                --pxe --noautoconsole
       when: vm_name not in vms.list_vms 
