@@ -22,7 +22,7 @@
                --disk path=/{{ vm_location }}/{{ vm_name }}.qcow2,bus=virtio,size={{ vm_disk_size }}
                --network type=direct,source=eno1,source_mode=bridge --virt-type qemu --graphics vnc
                --pxe --noautoconsole
-      when: vm_name not in list_vms 
+      when: vm_name not in vms.list_vms 
     - name: Get the MAC Address of the new VM
       shell: 'virsh domiflist {{ vm_name }} | grep virtio | awk ''{print $5}'' | sed s/\:/\-/g'
       register: vm_mac_address
