@@ -20,6 +20,6 @@
                virt-install --connect qemu:///system --name={{ vm_name }} --vcpus={{ vm_num_cpu }} 
                --memory={{ vm_ram }} --disk size={{ vm_disk_size }} --os-variant={{ vm_os_type }}
                --disk path={{ vm_location }}\{{ vm_name }}.qcow2,bus=scsi --controller virtio-scsi
-               --network network=default --virt-type qemu --graphics vnc
+               --network network=default --virt-type qemu --graphics vnc --pxe
       when: vm_name not in vms
 
