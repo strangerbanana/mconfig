@@ -24,6 +24,6 @@
                --pxe --noautoconsole
       when: vm_name not in vms 
     - name: Get the MAC Address of the new VM
-      command: 'virsh domiflist temp | grep virtio | awk ''{print $5}'' | sed s/\:/\-/g'
+      command: 'virsh domiflist {{ vm_name }} | grep virtio | awk ''{print $5}'' | sed s/\:/\-/g'
       register: vm_mac_address
 
