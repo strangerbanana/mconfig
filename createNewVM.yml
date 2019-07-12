@@ -1,16 +1,14 @@
 - name: Creates a new Virtual Machine
   hosts: all
   tasks:
+    - name: get VM disks
+      command: "ls {{ vm_location }}"
+      register: disks
+      changed_when: "disks.rc != 0"
     - name: Get current virtual machines
       virt:
         command: "list_vms"
-      register: vms 
-    - name: Print VMs
-      debug:
-        var: vms
+      register: vms
     - name: Print what is going to be created
       debug:
         msg: A new VM called {{ vm_name }} with  {{ vm_num_cpu }} CPUs and {{ vm_ram }} MB RAM running {{ vm_os }} will be put onto the {{ vm_network }}
-    - name: Display all variables/facts known for a host
-      debug:
-        var: hostvars[inventory_hostname]
