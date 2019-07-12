@@ -1,0 +1,16 @@
+- name: Stages the VM for pxe boot
+  hosts: all
+  tasks:
+    - name: Copy template file to mac address file
+      copy:
+        src: /tftpboot/pxelinux.cfg/default
+        dest: /tftpboot/pxelinux.cfg/01-{{ vm_mac_address }}
+    - name: Wait for the file to be downloaded
+      wait_for:
+        path: /tmp/foo
+        search_regex: {{ vm_mac_address }}
+      register: waitfor
+    - name: Delete the staging file now no longer requried
+      file:
+        path: /tftpboot/pxelinux.cfg/01-{{ vm_mac_address }}
+        state: absent
