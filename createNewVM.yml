@@ -18,8 +18,9 @@
     - name: Create the Virtual Machine
       command: >
                virt-install --connect qemu:///system --name={{ vm_name }} --vcpus={{ vm_num_cpu }} 
-               --memory={{ vm_ram }} --disk size={{ vm_disk_size }} --os-variant={{ vm_os_type }}
-               --disk path={{ vm_location }}\{{ vm_name }}.qcow2,bus=scsi --controller virtio-scsi
-               --network network=default --virt-type qemu --graphics vnc --pxe
+               --memory={{ vm_ram }} --os-variant={{ vm_os_type }} 
+               --disk path=/{{ vm_location }}/{{ vm_name }}.qcow2,bus=scsi,size={{ vm_disk_size }}
+               --network type=direct,source=eno1,source_mode=bridge --virt-type qemu --graphics vnc
+               --pxe --noautoconsole
       when: vm_name not in vms
 
