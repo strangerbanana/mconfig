@@ -14,7 +14,12 @@
         msg: A new VM called {{ vm_name }} with  {{ vm_num_cpu }} CPUs and {{ vm_ram }} MB RAM running {{ vm_os }} will be put onto the {{ vm_network }}
     - name: Get the OS type
       set_fact:  
-        vm_os_type: "{% if vm_os=='CentOS7-Basic' %}CentOS7{% elif vm_os=='Fedora30-Basic'%}Fedora28{% else %}Other{% endif %}"
-    - name: Print the OS Type
-      debug:
-       msg: OS type is {{ vm_os_type }}
+        vm_os_type: "{% if vm_os=='CentOS7-Basic' %}centos7.0{% elif vm_os=='Fedora30-Basic'%}fedora28{% else %}fedora-unknown{% endif %}"
+    - name: Create the Virtual Machine
+      command: >
+               virt-install --connect qemu:///system --name={{ vm_name }} --vcpus={{ vm_num_cpu }} 
+               --memory={{ vm_ram }} --disk size={{ vm_disk_size }} --os-variant={{ vm_os_type }}
+               --disk path={{ vm_location }}\{{ vm_name }}.qcow2,bus=scsi --controller virtio-scsi
+               --network network=default --virt-type qemu --graphics vnc
+      when: vm_name not in vms
+
