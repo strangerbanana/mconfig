@@ -8,7 +8,7 @@
         dest: /tftpboot/pxelinux.cfg/01-{{ vm_mac_address }}
     - name: Wait for the file to be downloaded
       wait_for:
-        path: /var/log/messages
+        path: /var/log/tftp.log
         search_regex: .+finished pxelinux.cfg/01-{{ vm_mac_address }}
       register: waitfor
     - name: Delete the staging file now no longer requried
