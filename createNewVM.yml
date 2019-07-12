@@ -30,4 +30,4 @@
     - name: Get the Mac Address variable to pass to the next step
       set_stats:
         data:
-          integration_results_url:  "{{ (vm_mac_address.stdout).link }}"
+          vm_mac_address:  "{{ (vm_mac_address.stdout) }}"
