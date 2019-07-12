@@ -27,4 +27,7 @@
       shell: 'virsh domiflist {{ vm_name }} | grep virtio | awk ''{print $5}'' | sed s/\:/\-/g'
       register: vm_mac_address
       changed_when: "vm_mac_address.rc != 0"
-
+    - name: Get the Mac Address variable to pass to the next step
+      set_stats:
+      data:
+        integration_results_url:  "{{ (vm_mac_address.stdout).link }}"
