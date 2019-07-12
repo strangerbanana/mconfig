@@ -26,4 +26,5 @@
     - name: Get the MAC Address of the new VM
       shell: 'virsh domiflist {{ vm_name }} | grep virtio | awk ''{print $5}'' | sed s/\:/\-/g'
       register: vm_mac_address
+      changed_when: "vm_mac_address.rc != 0"
 
