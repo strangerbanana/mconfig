@@ -92,3 +92,7 @@
         regexp: '^(.*)Protocol(.*)$' 
         line: 'Protocol 2'
         backrefs: yes
+    - name: Update everything
+      yum:
+        name: '*'
+        state: latest
