@@ -12,7 +12,9 @@
     - name: Print what is going to be created
       debug:
         msg: A new VM called {{ vm_name }} with  {{ vm_num_cpu }} CPUs and {{ vm_ram }} MB RAM running {{ vm_os }} will be put onto the {{ vm_network }}
-    - name: create disk
-      command: >
-               virt-builder --format qcow2 centos-7.4 -o {{ vm_location }}/{{ vm_name }}.qcow2
-      when: vm_name not in disks.stdout
+    - name: Get the OS type
+      set_fact:  
+        vm_os_type: "{% if vm_os=='CentOS7-Basic' %}CentOS7{% elif vm_os=='Fedora30-Basic'%}Fedora28{% else %}Other{% endif %}"
+    - name: Print the OS Type
+      debug:
+       msg: OS type is {{ vm_os_type }}
