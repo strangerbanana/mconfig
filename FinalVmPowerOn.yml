@@ -1,0 +1,22 @@
+- name: Modifies the Virtual Machine for the final power on post installation
+  hosts: all
+  tasks:
+    - name: Get current Virtual Machine Settings
+      shell: virsh dumpxml {{ vm_name }} > /tmp/edit{{ vm_name }}.xml
+
+    - name: Remove Network Boot
+      shell: grep -v "<boot dev='network'/>" /tmp/edit{{ vm_name }}.xml > /tmp/edit{{ vm_name }}mod.xml
+
+    - name: Change reboot to reboot rather than power off the Virtual Machine
+      lineinfile:
+        dest: /tmp/edit{{ vm_name }}mod.xml
+        regexp: '^(.*)<on_reboot>.+</on_reboot>(.*)$' 
+        line: '<on_reboot>restart</on_reboot>'
+        backrefs: yes
+
+    - name: Define the Virtual Machine from the modified settings
+      shell: virsh define /tmp/edit{{ vm_name }}mod.xml
+
+    - name: Start the VM
+      command: > 
+                virsh start {{ vm_name }}
