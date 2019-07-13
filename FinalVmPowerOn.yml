@@ -14,6 +14,9 @@
         line: '<on_reboot>restart</on_reboot>'
         backrefs: yes
 
+    - name: Define the Virtual Machine from the modified settings
+      shell: virsh define /tmp/edit{{ vm_name }}mod.xml
+
     - name: Remove the two configuration files now not needed
       file:
         path: "{{ item }}"
@@ -21,10 +24,7 @@
       with_items:
         - /tmp/edit{{ vm_name }}.xml
         - /tmp/edit{{ vm_name }}mod.xml
-
-    - name: Define the Virtual Machine from the modified settings
-      shell: virsh define /tmp/edit{{ vm_name }}mod.xml
-
+        
     - name: Start the VM
       command: > 
                 virsh start {{ vm_name }}
