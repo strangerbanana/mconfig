@@ -32,4 +32,4 @@
     - name: Store the IP Address for the next playbook
       set_stats:
         data:
-          vm_mac_address:  "{{ (vm_ip_address.stdout) }}"
+          vm_ip_address:  "{{ (vm_ip_address.stdout) }}"
