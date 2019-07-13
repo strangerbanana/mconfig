@@ -5,29 +5,48 @@
       command: "ls {{ vm_location }}"
       register: disks
       changed_when: "disks.rc != 0"
+      
     - name: Get current virtual machines
       virt:
         command: "list_vms"
       register: vms
+
     - name: Print what is going to be created
       debug:
         msg: A new VM called {{ vm_name }} with  {{ vm_num_cpu }} CPUs and {{ vm_ram }} MB RAM running {{ vm_os }} will be put onto the {{ vm_network }}
+
     - name: Get the OS type
       set_fact:  
         vm_os_type: "{% if vm_os=='CentOS7-Basic' %}centos7.0{% elif vm_os=='Fedora30-Basic'%}fedora28{% else %}fedora-unknown{% endif %}"
-    - name: Create the Virtual Machine
+
+    - name: Generate the Virtual Machine template
       command: >
-               virt-install --connect qemu:///system --name={{ vm_name }} --vcpus={{ vm_num_cpu }} 
-               --memory={{ vm_ram }} --os-variant={{ vm_os_type }} 
-               --disk path={{ vm_location }}/{{ vm_name }}.qcow2,bus=virtio,size={{ vm_disk_size }}
-               --network type=direct,source=eno1,source_mode=bridge --virt-type qemu --graphics vnc
-               --pxe --noautoconsole
-      when: vm_name not in vms.list_vms 
+                virt-install --connect qemu:///system --name={{ vm_name }} --vcpus={{ vm_num_cpu }} 
+                --cpu host --memory={{ vm_ram }} --os-variant={{ vm_os_type }} 
+                --disk path={{ vm_location }}/{{ vm_name }}.qcow2,bus=virtio,size={{ vm_disk_size }}
+                --network type=direct,source=eno1,source_mode=bridge --virt-type qemu --graphics vnc
+                --noautoconsole --print-xml 1 > /tmp/templ-{{ vm_name }}.xml
+      when: vm_name not in vms.list_vms
+
+    - name: Deploy the Virtual Machine in the stopped state
+      command: >
+                virsh define /tmp/templ-{{ vm_name }}.xml
+      when: vm_name not in vms.list_vms
+
+    - name: Remove the Virtual Machine template file
+      file:
+        path: /tmp/templ-{{ vm_name }}.xml
+        state: absent
+      when: vm_name not in vms.list_vms
+
     - name: Get the MAC Address of the new VM
       shell: 'virsh domiflist {{ vm_name }} | grep virtio | awk ''{print $5}'' | sed s/\:/\-/g'
       register: vm_mac_address
       changed_when: "vm_mac_address.rc != 0"
+      when: vm_name not in vms.list_vms
+
     - name: Get the Mac Address variable to pass to the next step
       set_stats:
         data:
           vm_mac_address:  "{{ (vm_mac_address.stdout) }}"
+      when: vm_name not in vms.list_vms
