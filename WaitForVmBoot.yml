@@ -19,16 +19,16 @@
       shell: 'grep {{ vm_mac_address }} /var/log/osinstall.log | awk ''{print $4}'''
       register: vm_ip_address
       changed_when: "vm_ip_address.rc != 0"
-    - name: Add the new machine to AWX for later configuration
-      uri:
-        url: http://10.31.248.188/api/v2/hosts/
-        method: POST
-        user: awx
-        password: your_pass
-        body: "{{ lookup('file','issue.json') }}"
-        force_basic_auth: yes
-        status_code: 201
-        body_format: json
+#    - name: Add the new machine to AWX for later configuration
+#      uri:
+#        url: http://10.31.248.188/api/v2/hosts/
+#        method: POST
+#        user: awx
+#        password: your_pass
+#        body: "{{ lookup('file','issue.json') }}"
+#        force_basic_auth: yes
+#        status_code: 201
+#        body_format: json
     - name: Store the IP Address for the next playbook
       set_stats:
         data:
