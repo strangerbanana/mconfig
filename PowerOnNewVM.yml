@@ -1,0 +1,6 @@
+- name: Start the new virtual machine
+  hosts: all
+  tasks:
+    - name: Start the VM
+      command: > 
+                virsh start {{ vm_name }}

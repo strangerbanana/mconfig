@@ -1,0 +1,12 @@
+- name: Wait for the VM to tftp the staged file
+  hosts: all
+  tasks:
+    - name: Wait for the file to be downloaded
+      wait_for:
+        path: /var/log/tftp.log
+        search_regex: .+finished pxelinux.cfg/01-{{ vm_mac_address }}
+      register: waitfor
+    - name: Delete the staging file now no longer requried
+      file:
+        path: /tftpboot/pxelinux.cfg/01-{{ vm_mac_address }}
+        state: absent
