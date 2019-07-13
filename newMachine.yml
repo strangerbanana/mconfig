@@ -1,5 +1,5 @@
 - name: New machine post install setup
-  hosts: localhost
+  hosts: all
   tasks:
     - name: Enable SELinux
       selinux:
