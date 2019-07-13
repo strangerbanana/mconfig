@@ -16,7 +16,7 @@
         search_regex: .+{{ vm_mac_address }} Installation has completed
         timeout: 600
     - name: Get the Virtual Machine IP address
-      shell: 'grep {{ vm_mac_Address }} /var/log/osinstall.log | awk ''{print $4}'''
+      shell: 'grep {{ vm_mac_address }} /var/log/osinstall.log | awk ''{print $4}'''
       register: vm_ip_address
       changed_when: "vm_ip_address.rc != 0"
     - name: Store the IP Address for the next step
