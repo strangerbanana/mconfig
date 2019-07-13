@@ -5,7 +5,7 @@
       command: "ls {{ vm_location }}"
       register: disks
       changed_when: "disks.rc != 0"
-      
+
     - name: Get current virtual machines
       virt:
         command: "list_vms"
@@ -20,7 +20,7 @@
         vm_os_type: "{% if vm_os=='CentOS7-Basic' %}centos7.0{% elif vm_os=='Fedora30-Basic'%}fedora28{% else %}fedora-unknown{% endif %}"
 
     - name: Generate the Virtual Machine template
-      command: >
+      shell: >
                 virt-install --connect qemu:///system --name={{ vm_name }} --vcpus={{ vm_num_cpu }} 
                 --cpu host --memory={{ vm_ram }} --os-variant={{ vm_os_type }} 
                 --disk path={{ vm_location }}/{{ vm_name }}.qcow2,bus=virtio,size={{ vm_disk_size }}
