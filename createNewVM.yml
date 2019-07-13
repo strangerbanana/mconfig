@@ -25,7 +25,7 @@
                 --cpu host --memory={{ vm_ram }} --os-variant={{ vm_os_type }} 
                 --disk path={{ vm_location }}/{{ vm_name }}.qcow2,bus=virtio,size={{ vm_disk_size }}
                 --network type=direct,source=eno1,source_mode=bridge --virt-type qemu --graphics vnc
-                --noautoconsole --print-xml 1 > /tmp/templ-{{ vm_name }}.xml
+                --pxe --noautoconsole --print-xml 1 > /tmp/templ-{{ vm_name }}.xml
       when: vm_name not in vms.list_vms
 
     - name: Deploy the Virtual Machine in the stopped state
