@@ -16,7 +16,7 @@
 
     - name: Remove the two configuration files now not needed
       file:
-        path: {{ item }}
+        path: "{{ item }}"
         state: absent
       with_items:
         - /tmp/edit{{ vm_name }}.xml
