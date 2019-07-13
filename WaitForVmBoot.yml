@@ -13,7 +13,7 @@
     - name: Wait for installation to finish
       wait_for:
         path: /var/log/osinstall.log
-        search_regex: .+{{ vm_mac_address }} Installation has completed
+        search_regex: .+$( echo "{{ vm_mac_Address }}" | sed "s/-/:/g" ) Installation has completed
         timeout: 600
     - name: Get the Virtual Machine IP address
       shell: 'grep $( echo "{{ vm_mac_Address }}" | sed "s/-/:/g" ) /var/log/osinstall.log | awk ''{print $4}'''
