@@ -3,7 +3,7 @@
   tasks:
     - name: Add the entry to local dns file
       lineinfile:
-        path: {{ dns_zone_file }}
+        path: '{{ dns_zone_file }}'
         line: "{{ vm_ip_address }} {{ vm_name }}{{ dns_domain }}"
     - name: Restart the DNS service
       systemd:
