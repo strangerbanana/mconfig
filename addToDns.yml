@@ -1,5 +1,6 @@
 - name: Adds a host to the DNS server
   hosts: all
+  gather_facts: no
   tasks:
     - name: Add the entry to local dns file
       lineinfile:
