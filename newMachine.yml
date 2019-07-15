@@ -1,5 +1,6 @@
 - name: New machine post install setup
   hosts: all
+  gather_facts: no
   tasks:
     - name: Enable SELinux
       selinux:

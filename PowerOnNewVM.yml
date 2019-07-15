@@ -1,5 +1,6 @@
 - name: Start the new virtual machine
   hosts: all
+  gather_facts: no
   tasks:
     - name: Start the VM
       command: > 

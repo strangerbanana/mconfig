@@ -1,5 +1,6 @@
 - name: Wait for the VM to tftp the staged file
   hosts: all
+  gather_facts: no
   tasks:
     - name: Wait for the file to be downloaded
       wait_for:

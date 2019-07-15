@@ -1,5 +1,6 @@
 - name: Modifies the Virtual Machine for the final power on post installation
   hosts: all
+  gather_facts: no
   tasks:
     - name: Get current Virtual Machine Settings
       shell: virsh dumpxml {{ vm_name }} > /tmp/edit{{ vm_name }}.xml
@@ -24,7 +25,7 @@
       with_items:
         - /tmp/edit{{ vm_name }}.xml
         - /tmp/edit{{ vm_name }}mod.xml
-        
+
     - name: Start the VM
       command: > 
                 virsh start {{ vm_name }}

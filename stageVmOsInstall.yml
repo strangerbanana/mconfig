@@ -1,5 +1,6 @@
 - name: Stages the VM for pxe boot
   hosts: all
+  gather_facts: no
   tasks:
     - name: Copy template file to mac address file
       copy:

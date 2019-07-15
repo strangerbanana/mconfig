@@ -1,5 +1,6 @@
 - name: Creates a new Virtual Machine
   hosts: all
+  gather_facts: no
   tasks:
     - name: get VM disks
       command: "ls {{ vm_location }}"
