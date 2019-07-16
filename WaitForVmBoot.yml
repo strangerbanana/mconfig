@@ -30,6 +30,7 @@
         force_basic_auth: yes
         status_code: 201
         body_format: json
+      delegate_to: localhost
     - name: Store the IP Address for the next playbook
       set_stats:
         data:
