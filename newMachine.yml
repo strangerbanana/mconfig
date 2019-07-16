@@ -2,16 +2,6 @@
   hosts: "{{ vm_name }}.el1.aa"
   gather_facts: no
   tasks:
-    - name: Enable SELinux
-      selinux:
-        policy: targeted
-        state: enforcing
-    - name: Configure yum max old kernels
-      lineinfile: 
-        dest: /etc/yum.conf
-        regexp: '^(.*)installonly_limit(.*)$' 
-        line: 'installonly_limit=2'
-        backrefs: yes
     - name: Install EPEL
       yum:
         name: epel-release
@@ -60,6 +50,16 @@
           - NetworkManager-libnm
           - NetworkManager
         state: absent
+    - name: Enable SELinux
+      selinux:
+        policy: targeted
+        state: enforcing
+    - name: Configure yum max old kernels
+      lineinfile: 
+        dest: /etc/yum.conf
+        regexp: '^(.*)installonly_limit(.*)$' 
+        line: 'installonly_limit=2'
+        backrefs: yes
     - name: Enable and start iptables
       systemd:
         name: iptables
