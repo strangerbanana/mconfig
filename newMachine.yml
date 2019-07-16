@@ -1,5 +1,5 @@
 - name: New machine post install setup
-  hosts: {{ vm_name }}.el1.aa
+  hosts: "{{ vm_name }}.el1.aa"
   gather_facts: no
   tasks:
     - name: Enable SELinux
