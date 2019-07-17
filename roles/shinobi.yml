@@ -10,7 +10,6 @@
   yum:
     name:
       - nodejs
-      - npm
     state: present
 - name: Git Clone shinobi
   git:
@@ -18,4 +17,3 @@
     dest: /opt/shinobi
 - name: Install shinobi
   shell: /usr/bin/bash /opt/shinobi/INSTALL/centos.sh
-  
