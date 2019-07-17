@@ -10,6 +10,9 @@
       delay: 5
       vars:
         ansible_connection: local
+    - name: Ensure that the host is not already in known_hosts
+      shell: "ssh-keygen -R {{ vm_name }}.el1.aa"
+      changed_when: "vm_ip_address.rc != 0"
     - name: Install EPEL
       yum:
         name: epel-release
