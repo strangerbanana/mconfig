@@ -3,6 +3,7 @@
     name:
       - ipset
       - ipset-service
+    state: present
 - name: Enable and start ipset service
   systemd:
     name: ipset

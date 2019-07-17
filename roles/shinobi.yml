@@ -1,0 +1,21 @@
+- name: Install necessary packages for shinobi
+  yum:
+    name:
+      - curl
+      - git
+    state: present
+- name: Add NodeJS repo
+  shell: curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
+- name: Install NodeJS
+  yum:
+    name:
+      - nodejs
+      - npm
+    state: present
+- name: Git Clone shinobi
+  git:
+    repo: https://gitlab.com/Shinobi-Systems/Shinobi.git
+    dest: /opt/shinobi
+- name: Install shinobi
+  shell: /usr/bin/bash /opt/shinobi/INSTALL/centos.sh
+  
