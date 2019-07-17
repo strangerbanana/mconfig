@@ -113,5 +113,5 @@
         state: latest
     - name: Post install specifics
       debug:
-        msg: This host will get the role of - something
-      when: '"firewall" in vm_role'
+        msg: This host will get the role of - {{ vm_role }}
+      when: '"none" not in vm_role'
