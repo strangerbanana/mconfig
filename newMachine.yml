@@ -116,4 +116,4 @@
         msg: This host will get the role of - {{ vm_role }}
       when: '"none" not in vm_role'
     - name: Include post install specific tasks
-      include: roles/{{ vm_role }}
+      include: roles/{{ vm_role }}.yml
