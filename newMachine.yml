@@ -111,3 +111,7 @@
       yum:
         name: '*'
         state: latest
+    - name: Post install specifics
+      debug:
+        msg: This host will get the role of - something
+      when: '"firewall" in vm_role'
