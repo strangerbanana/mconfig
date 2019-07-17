@@ -1,111 +1,108 @@
-- name: Test playbook
-  hosts: all
-  tasks:
-    - name: Install necessary firewall packages
-      yum:
-        name:
-          - ipset
-          - ipset-service
-    - name: Enable and start ipset service
-      systemd:
-        name: ipset
-        enabled: yes
-        masked: no
-        state: started
-    - name: Set ipset to save on stop
-      lineinfile: 
-        dest: /etc/sysconfig/ipset-config 
-        regexp: '^(.*)IPSET_SAVE_ON_STOP(.*)$' 
-        line: 'IPSET_SAVE_ON_STOP="yes"'
-        backrefs: yes
-      register: ipsetSaveOnStop
-    - name: Enable IPv4 Forwarding
-      sysctl:
-        name: net.ipv4.ip_forward
-        value: '1'
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable all send redirects
-      sysctl:
-        name: net.ipv4.conf.all.send_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable default send redirects
-      sysctl:
-        name: net.ipv4.conf.default.send_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable all accept redirects
-      sysctl:
-        name: net.ipv4.conf.all.accept_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable default accept redirects
-      sysctl:
-        name: net.ipv4.conf.default.accept_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable all secure redirects
-      sysctl:
-        name: net.ipv4.conf.all.secure_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable default secure redirects
-      sysctl:
-        name: net.ipv4.conf.default.secure_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable ipv6 all accept redirects
-      sysctl:
-        name: net.ipv6.conf.all.accept_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Disable default ipv6 redirects
-      sysctl:
-        name: net.ipv6.conf.default.accept_redirects
-        sysctl_file: /etc/sysctl.d/10-forwarding.conf
-        value: '0'
-        sysctl_set: yes
-        state: present
-        reload: yes
-    - name: Enable SNMP service
-      systemd:
-        name: snmpd
-        enabled: yes
-        masked: no
-        state: started
-    - name: Change logging for SNMP Service
-      lineinfile: 
-        dest: /usr/lib/systemd/system/snmpd.service
-        regexp: '^(.*)Environment=OPTIONS=(.*)$' 
-        line: 'Environment=OPTIONS="-LS0-5d"'
-        backrefs: yes
-      register: snmplogging
-    - name: Restart SNMPd if logging changed
-      systemd:
-        name: snmpd
-        state: restarted
-      when: snmplogging.changed
+- name: Install necessary firewall packages
+  yum:
+    name:
+      - ipset
+      - ipset-service
+- name: Enable and start ipset service
+  systemd:
+    name: ipset
+    enabled: yes
+    masked: no
+    state: started
+- name: Set ipset to save on stop
+  lineinfile: 
+    dest: /etc/sysconfig/ipset-config 
+    regexp: '^(.*)IPSET_SAVE_ON_STOP(.*)$' 
+    line: 'IPSET_SAVE_ON_STOP="yes"'
+    backrefs: yes
+  register: ipsetSaveOnStop
+- name: Enable IPv4 Forwarding
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable all send redirects
+  sysctl:
+    name: net.ipv4.conf.all.send_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable default send redirects
+  sysctl:
+    name: net.ipv4.conf.default.send_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable all accept redirects
+  sysctl:
+    name: net.ipv4.conf.all.accept_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable default accept redirects
+  sysctl:
+    name: net.ipv4.conf.default.accept_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable all secure redirects
+  sysctl:
+    name: net.ipv4.conf.all.secure_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable default secure redirects
+  sysctl:
+    name: net.ipv4.conf.default.secure_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable ipv6 all accept redirects
+  sysctl:
+    name: net.ipv6.conf.all.accept_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Disable default ipv6 redirects
+  sysctl:
+    name: net.ipv6.conf.default.accept_redirects
+    sysctl_file: /etc/sysctl.d/10-forwarding.conf
+    value: '0'
+    sysctl_set: yes
+    state: present
+    reload: yes
+- name: Enable SNMP service
+  systemd:
+    name: snmpd
+    enabled: yes
+    masked: no
+    state: started
+- name: Change logging for SNMP Service
+  lineinfile: 
+    dest: /usr/lib/systemd/system/snmpd.service
+    regexp: '^(.*)Environment=OPTIONS=(.*)$' 
+    line: 'Environment=OPTIONS="-LS0-5d"'
+    backrefs: yes
+  register: snmplogging
+- name: Restart SNMPd if logging changed
+  systemd:
+    name: snmpd
+    state: restarted
+  when: snmplogging.changed
