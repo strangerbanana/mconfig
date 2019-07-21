@@ -13,7 +13,7 @@
   yum:
     name:
       - nginx
-      - git
+      - python-passlib
       - java-1.8.0-openjdk
       - elasticsearch
       - kibana
@@ -32,6 +32,13 @@
     insertafter: '^-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT'
     line: '-A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT'
   register: iptables_http
+- name: Add http to input chain on iptables
+  lineinfile:
+    path: /etc/sysconfig/iptables
+    regexp: '^-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT'
+    insertafter: '^-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT'
+    line: '-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT'
+  register: iptables_http
 - name: Reload iptables with new rules
   systemd:
     name: iptables
@@ -42,8 +49,33 @@
     path: /etc/elasticsearch/elasticsearch.yml
     regexp: '^#network.host'
     line: 'network.host: localhost'
-- name: Start and enable elactic
+- name: Start and enable elastic
   systemd:
     name: elasticsearch
     state: started
     enabled: yes
+- name: Start and enable kibana
+  systemd:
+    name: kibana
+    state: started
+    enabled: yes
+- name: Generate a password for nginx to elastic communications
+  htpasswd:
+    path: /etc/nginx/htpasswd.users
+    name: admin
+    password: 'password'
+- name: Copy the elastic nginx configuration
+  copy:
+    src: files/elastic_nginx.conf
+    dest: /etc/nginx/conf.d/elastic.el1.aa.conf
+  register: nginx-configuration
+- name: Restart nginx when the configuration has changed
+  systemd: 
+    name: nginx
+    state: restarted
+  when: nginx-configuration.changed
+- name: Enable selinux for nginx
+  seboolean:
+    name: httpd_can_network_connect
+    state: yes
+    persistent: yes
