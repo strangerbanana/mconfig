@@ -68,7 +68,7 @@
   copy:
     src: files/elastic_nginx.conf
     dest: /etc/nginx/conf.d/elastic.el1.aa.conf
-  register: nginx-configuration
+  register: nginx_configuration
 - name: Restart nginx when the configuration has changed
   systemd: 
     name: nginx
