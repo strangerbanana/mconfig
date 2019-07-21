@@ -15,5 +15,3 @@
   git:
     repo: https://gitlab.com/Shinobi-Systems/Shinobi.git
     dest: /opt/shinobi
-- name: Install shinobi
-  shell: /usr/bin/bash /opt/shinobi/INSTALL/centos.sh
