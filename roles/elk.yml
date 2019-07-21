@@ -73,7 +73,7 @@
   systemd: 
     name: nginx
     state: restarted
-  when: nginx-configuration.changed
+  when: nginx_configuration.changed
 - name: Enable selinux for nginx
   seboolean:
     name: httpd_can_network_connect
