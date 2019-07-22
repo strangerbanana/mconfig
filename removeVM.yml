@@ -1,0 +1,39 @@
+- name: Creates a new Virtual Machine
+  hosts: all
+  gather_facts: no
+  tasks:
+  - name: Get current virtual machines
+    virt:
+      command: "list_vms"
+      register: vms
+
+  - name: Get the location of the disk
+    shell: 'virsh dumpxml --domain elastic | grep ''source file'' | sed -E -n ''s/^\s+<source file=''"''"''(.+)''"''"''\/>/\1/p'''
+    register: vm_disk_name
+    when: vm_name not in vms.list_vms
+
+  - name: Shutdown the Virtual Machine
+    shell: 'virsh destroy --domain {{ vm_name }}'
+    when: vm_name not in vms.list_vms
+
+  - name: Remove the Virtual Machine
+    shell: 'virsh undefine --domain {{ vm_name }}'
+    when: vm_name not in vms.list_vms
+
+  - name: Delete the virtual disk
+    file:
+      path: {{ vm_disk_name.stdout }}
+    when: vm_name not in vms.list_vms
+
+  - name: Add the new machine to AWX for later configuration
+    uri:
+      url: 'http://10.31.248.188/api/v2/hosts/?search={{ vm_name }}'
+      method: DELETE
+      user: awx
+      password: your_pass
+      force_basic_auth: yes
+      status_code: 204
+    delegate_to: localhost
+
+
+    

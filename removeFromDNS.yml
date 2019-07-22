@@ -1,0 +1,15 @@
+- name: Removes a host from the DNS server
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Remove the entry from the local dns file
+      lineinfile:
+        path: '{{ dns_zone_file }}'
+        state: absent
+        regexp: " {{ vm_name }}."
+    - name: Restart the DNS service
+      systemd:
+        name: '{{ dns_service_name }}'
+        enabled: yes
+        masked: no
+        state: restarted
