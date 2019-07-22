@@ -22,7 +22,8 @@
 
   - name: Delete the virtual disk
     file:
-      path: {{ vm_disk_name.stdout }}
+      path: '{{ vm_disk_name.stdout }}'
+      state: absent
     when: vm_name not in vms.list_vms
 
   - name: Add the new machine to AWX for later configuration
