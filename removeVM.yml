@@ -8,7 +8,7 @@
       register: vms
 
   - name: Get the location of the disk
-    shell: 'virsh dumpxml --domain elastic | grep ''source file'' | sed -E -n ''s/^\s+<source file=''"''"''(.+)''"''"''\/>/\1/p'''
+    shell: 'virsh dumpxml --domain {{ vm_name }} | grep ''source file'' | sed -E -n ''s/^\s+<source file=''"''"''(.+)''"''"''\/>/\1/p'''
     register: vm_disk_name
     when: vm_name not in vms.list_vms
 
