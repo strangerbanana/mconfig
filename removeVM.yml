@@ -5,7 +5,7 @@
   - name: Get current virtual machines
     virt:
       command: "list_vms"
-      register: vms
+    register: vms
 
   - name: Get the location of the disk
     shell: 'virsh dumpxml --domain {{ vm_name }} | grep ''source file'' | sed -E -n ''s/^\s+<source file=''"''"''(.+)''"''"''\/>/\1/p'''
