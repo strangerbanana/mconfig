@@ -26,7 +26,7 @@
       state: absent
     when: vm_name not in vms.list_vms
 
-  - name: Add the new machine to AWX for later configuration
+  - name: Remove the VM from AWX
     uri:
       url: 'http://10.31.248.188/api/v2/hosts/?search={{ vm_name }}'
       method: DELETE
