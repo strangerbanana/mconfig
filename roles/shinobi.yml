@@ -3,6 +3,9 @@
     name:
       - curl
       - git
+      - cairo-devel 
+      - libjpeg-turbo-devel 
+      - giflib-devel
     state: present
 - name: Add NodeJS repo
   shell: curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
