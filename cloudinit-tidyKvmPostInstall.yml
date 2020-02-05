@@ -1,0 +1,9 @@
+- name: Creates a new Virtual Machine
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Wait for message of completion from virtual machine
+
+    - name: Unmouont cloud image from virtual machine
+
+    - name: Remove cloud init image from disk

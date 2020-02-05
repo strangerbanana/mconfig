@@ -1,0 +1,39 @@
+- name: Creates a new Virtual Machine
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Print what is going to be created
+      debug:
+        msg: A new VM called {{ vm_name }} with  {{ vm_num_cpu }} CPUs and {{ vm_ram }} MB RAM running {{ vm_os }} will be put onto the {{ vm_network }}
+
+    - name: Get the current virtual disks
+      command: "ls {{ vm_location }}"
+      register: disks
+      changed_when: "disks.rc != 0"
+
+    - name: Get current virtual machines
+      virt:
+        command: "list_vms"
+      register: vms
+
+    - name: Get the OS type
+      set_fact:  
+        vm_os_type: "{% if vm_os=='CentOS7-Basic' %}centos7.0{% elif vm_os=='Fedora30-Basic'%}fedora28{% else %}fedora-unknown{% endif %}"
+
+    - name: Create the Virtual Disk
+
+    - name: Expand the Virtual Disk to the expected size
+
+    - name: Create the instance meta data file
+
+    - name: Create the user meta data file
+
+    - name: Create the cloud-init image
+
+    - name: Remove the meta data files now not needed
+
+    - name: Create the virtial machine
+
+    - name: Wait for the virtual machine to report IP address
+
+    - name: Pass IP address to AWX for next step

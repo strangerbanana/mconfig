@@ -1,0 +1,4 @@
+- name: Pre-Stage the Virtual Machine in the FreeIPA directory
+  hosts: all
+  gather_facts: no
+  tasks:

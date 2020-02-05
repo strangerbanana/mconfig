@@ -1,5 +1,5 @@
 - name: New machine post install setup
-  hosts: "{{ vm_name }}.el1.aa"
+  hosts: "{{ vm_name }}.{{ domain_name }}"
   gather_facts: no
   tasks:
     - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
@@ -10,15 +10,18 @@
       delay: 5
       vars:
         ansible_connection: local
+
     - name: Ensure that the host is not already in known_hosts
       shell: "ssh-keygen -R {{ vm_name }}.el1.aa"
       register: known_hosts
       changed_when: "known_hosts.rc != 0"
       delegate_to: localhost
+
     - name: Install EPEL
       yum:
         name: epel-release
         state: latest
+
     - name: Install necessary packages
       yum:
         name:
@@ -34,7 +37,9 @@
           - wget
           - ntp
           - libselinux-python
+          - ipa-client
         state: present
+
     - name: Remove unnecessary packages
       yum:
         name:
@@ -64,53 +69,65 @@
           - NetworkManager-libnm
           - NetworkManager
         state: absent
+
     - name: Enable SELinux
       selinux:
         policy: targeted
         state: enforcing
+
     - name: Configure yum max old kernels
       lineinfile: 
         dest: /etc/yum.conf
         regexp: '^(.*)installonly_limit(.*)$' 
         line: 'installonly_limit=2'
         backrefs: yes
+
     - name: Enable and start iptables
       systemd:
         name: iptables
         enabled: yes
         masked: no
+
     - name: Enable and start ip6tables
       systemd:
         name: ip6tables
         enabled: yes
         masked: no
+
     - name: Configure yum cron updates
       lineinfile: 
         dest: /etc/yum/yum-cron.conf
         regexp: '^(.*)apply_updates(.*)$' 
         line: 'apply_updates = yes'
         backrefs: yes
+
     - name: Enable yum cron
       systemd:
         name: yum-cron
         enabled: yes
         masked: no
+
     - name: Set the SSH daemon to ipv4 only
       lineinfile: 
         dest: /etc/ssh/sshd_config
         regexp: '^(.*)AddressFamily(.*)$' 
         line: 'AddressFamily inet'
         backrefs: yes
+
     - name: Set SSH to version 2 only
       lineinfile: 
         dest: /etc/ssh/sshd_config
         regexp: '^(.*)Protocol(.*)$' 
         line: 'Protocol 2'
         backrefs: yes
+
+    - name: Add host to Directory
+
     - name: Update everything
       yum:
         name: '*'
         state: latest
+
     - name: Post install specifics
       debug:
         msg: This host will get the role of - {{ vm_role }}
