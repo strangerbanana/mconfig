@@ -1,0 +1,31 @@
+- name: Configuration of workstations and laptops
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install EPEL
+      yum:
+        name: epel-release
+        state: latest
+    - name: Install necessary packages
+      yum:
+        name:
+          - htop
+          - vim
+          - iftop
+          - net-snmp
+          - net-tools
+          - yum-cron
+          - yum-utils
+          - wget
+          - ntp
+          - libselinux-python
+          - ipa-client
+        state: present
+    - name: Enable SELinux
+      selinux:
+        policy: targeted
+        state: enforcing
+    - name: Update everything
+      yum:
+        name: '*'
+        state: latest
